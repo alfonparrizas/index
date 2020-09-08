@@ -1,0 +1,13 @@
+steps:
+# Build the container image
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'gcr.io/fon-anthos-test/index', '.']
+# Push the container image to Container Registry
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'gcr.io/fon-anthos-test/index']
+# Deploy container image to Cloud Run
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  entrypoint: gcloud
+  args: ['run', 'deploy', 'index-service', '--image', 'gcr.io/fon-anthos-test/index', '--region', 'REGION', '--platform', 'managed']
+images:
+- gcr.io/fon-anthos-test/index
